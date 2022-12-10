@@ -1,0 +1,115 @@
+**********************************************************************
+Summary
+**********************************************************************
+
+The Channel Emulator (CE) is a software-based network-testing tool. Its
+primary functions are providing framing services, acting as a flexible
+protocol gateway, and providing network emulation capabilities.
+
+The CE can send and receive data from multiple types of devices and sources.
+Some or all of the incoming protocol data can be stripped, units can be
+resized, and new headers or trailers added. Network emulation such as delay,
+jitter, or errors can be inserted at any point in the stream.  For example, one
+example use of the CE is to act as a "bump in the wire" Martian delay emulator
+- taking packets from one Ethernet interface and delaying them for minutes and
+then forwarding them out another interface.
+
+The core functionality of the CE is controlled by either a configuration file
+or by XML-RPC calls (for which an experimental web interface is available).
+
+For details please see the full manual.
+
+**********************************************************************
+Basic Usage
+**********************************************************************
+NOTE: ctsced must be run as with superuser privileges, see the important
+SECURITY CONSIDERATIONS notes.
+
+Usage: ctsced [options]
+  --config/-c <filename>            Specify initial devices/channels config file name (Default: devices-channels.cfg)
+  --config-path/-C <directory>      Specify path to devices/channels config file directory (Default: /etc/ctsce)
+  --debug/-d <level>                Specify debug level (0-8) (Default: 7)
+  --foreground/-f                   Remain in the foreground at startup
+  --fileio-path/-F <directory>      Specify path to file I/O directory (Default: /var/lib/ctsce/fileIO)
+  --log/-l <filename>               Specify path to the log file (Default: /var/log/ctsced.log)
+  --protect/-p ethX,ethY,...        Comma-separated list of Ethernet interfaces to avoid
+  --srv-config/-s <filename>        Specify path to the server config file (Default: /etc/ctsced.cfg)
+  --no-save/-n                      Do not save a new config file on exit
+  --web-doc-path/-w <directory>     Specify path to web documents (Default: /var/lib/ctsce/www)
+
+
+**********************************************************************
+SECURITY CONSIDERATIONS
+**********************************************************************
+
+The primary functions of this software involve the manipulation of network
+traffic at a raw socket level.  Thus, the Channel Emulator must be run with
+superuser privileges.  This software should be treated as experimental, and
+adequate security precautions should be taken to protect any hosts that run
+this software.  This software was not intended for use on the Internet, but
+rather closed experimental networks.
+
+**********************************************************************
+Channel Emulator build prerequisites
+**********************************************************************
+ACE-6.0.1
+libnl-2.0
+xmlrpc-c
+libconfig
+boost-regex
+libmagic
+
+**********************************************************************
+ ACE 6.0.1
+**********************************************************************
+- Obtain from http://www.cs.wustl.edu/~schmidt/ACE.html or
+  use OS packages.
+- Build/use shared lib version.
+- Must have TIMED_MESSAGE_BLOCKS enabled
+
+**********************************************************************
+ libnl 2.0
+**********************************************************************
+- Obtain from http://people.suug.ch/~tgr/libnl/
+- for i in libnl-genl libnl-nf libnl-route libnl; do
+	sudo ln -s $prefix/lib/$i.so.2.0 $prefix/lib/$i.so; done
+- sudo cp netlink-generic.h netlink-local.h \
+	netlink-tc.h netlink-types.h \
+	$prefix/include
+
+**********************************************************************
+ xmlrpc-c
+**********************************************************************
+- Obtain from http://xmlrpc-c.sourceforge.net/
+- Pre-requisites:
+  - libcurl (http://curl.haxx.se/libcurl/) 
+  - libwww (http://www.w3.org/Library/)
+- Compile and install with default values.
+
+**********************************************************************
+libconfig
+**********************************************************************
+- Obtain from http://www.hyperrealm.com/libconfig/
+- Compile and install with default values.
+
+**********************************************************************
+ boost-regex
+**********************************************************************
+- Obtain from http://www.boost.org/ or distribution package.
+- Install with shared libraries.
+
+**********************************************************************
+ libmagic
+**********************************************************************
+- Obtain from http://www.darwinsys.com/file/ or distribution package.
+- Install with shared libraries.
+
+
+**********************************************************************
+BUILDING
+**********************************************************************
+
+cmake .
+make
+
+
